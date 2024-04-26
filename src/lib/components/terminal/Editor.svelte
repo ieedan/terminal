@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { getTextDimensions, type TextDimensions } from '$lib/ts/util';
-	import { onMount } from 'svelte';
 
+	let container: HTMLDivElement;
+	let pre: HTMLPreElement;
 	let editor: HTMLTextAreaElement;
 	let input: string = '';
 
@@ -10,6 +11,8 @@
 	let previousText = '';
 
 	let cwd = '$root/';
+
+	let focused = false;
 
 	$: cursorPos = calculateCursorPosition(previousText + cwd + ' ' + input, characterRect);
 
@@ -50,27 +53,31 @@
 		console.log('cancel');
 	};
 
-	onMount(() => {
+	const focus = () => {
 		characterRect = getTextDimensions(editor);
-		console.log(characterRect);
-	});
+		focused = true;
+	}
 </script>
 
 <svelte:document on:keydown={docKeydown} />
 
-<div class="relative flex-grow">
+<div class="relative flex-grow overflow-y-auto" bind:this={container}>
 	<textarea
 		bind:value={input}
 		bind:this={editor}
+		on:focus={focus}
+		on:blur={() => focused = false}
 		on:keydown={(e) => {
 			if (e.key == 'Enter') e.preventDefault();
 		}}
-		class="absolute h-full w-full cursor-default resize-none bg-transparent font-serif outline-none focus:outline-none"
+		class="absolute top-0 h-full w-full cursor-default resize-none bg-transparent font-serif outline-none focus:outline-none"
 	/>
 	<pre
-		class="bg-gui-background pointer-events-none absolute h-full w-full p-2 font-serif">{previousText}{cwd} {input}</pre>
+		bind:this={pre}
+		class="pointer-events-none absolute top-0 h-full w-full bg-gui-background p-2 font-serif">{previousText}{cwd} {input}</pre>
 	<div
+		data-show={focused}
 		style="height: {characterRect?.height}px; top: {cursorPos.y - 12}px; left: {cursorPos.x + 3}px;"
-		class="bg-gui-foreground-primary absolute w-[2px] animate-flash"
+		class="animate-flash absolute w-[2px] bg-gui-foreground-primary data-[show=false]:hidden"
 	></div>
 </div>
