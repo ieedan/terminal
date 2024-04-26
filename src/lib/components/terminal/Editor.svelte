@@ -61,7 +61,9 @@
 
 <svelte:document on:keydown={docKeydown} />
 
-<div class="relative flex-grow overflow-y-auto" bind:this={container}>
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y-no-static-element-interactions -->
+<div class="relative flex-grow overflow-y-auto" bind:this={container} on:click={() => editor.focus({ preventScroll: true })}>
 	<textarea
 		bind:value={input}
 		bind:this={editor}
@@ -70,11 +72,11 @@
 		on:keydown={(e) => {
 			if (e.key == 'Enter') e.preventDefault();
 		}}
-		class="absolute top-0 h-full w-full cursor-default resize-none bg-transparent font-serif outline-none focus:outline-none"
+		class="absolute top-0 w-full cursor-default h-full resize-none bg-transparent font-serif outline-none focus:outline-none"
 	/>
 	<pre
 		bind:this={pre}
-		class="pointer-events-none absolute top-0 h-full w-full bg-gui-background p-2 font-serif">{previousText}{cwd} {input}</pre>
+		class="pointer-events-none absolute top-0 w-full bg-gui-background p-2 font-serif">{previousText}{cwd} {input}</pre>
 	<div
 		data-show={focused}
 		style="height: {characterRect?.height}px; top: {cursorPos.y - 12}px; left: {cursorPos.x + 3}px;"
