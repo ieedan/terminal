@@ -1,3 +1,3 @@
-# terminal.aidanbleser.com
+# terminal
 
-A terminal recreation in the browser.
+A terminal recreation in the browser. Implements a few basic commands.

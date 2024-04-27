@@ -1,6 +1,7 @@
 import { mode, setMode } from 'mode-watcher';
 import type { clapOptions, stdout } from './clap';
 import { get } from 'svelte/store';
+import { goto } from '$app/navigation';
 
 export type Commands = {
 	[key: string]: {
@@ -23,6 +24,8 @@ export const commands: Commands = {
 			logger('    clear/cls: clears the terminal');
 			logger('    history: displays command history');
 			logger('        --clr: clears command history');
+			logger('    src: get the link to the source repository');
+			logger('    	--go: go to the source repository');
 			logger('');
 			logger('More commands coming soon!');
 		}
@@ -81,6 +84,15 @@ export const commands: Commands = {
 				history.forEach((entry) => {
 					logger(`${entry}`);
 				});
+			}
+		}
+	},
+	src: {
+		fn: async ({ args, logger }) => {
+			if (args.includes("--go")) {
+				window.open("https://github.com/ieedan/terminal", "_blank");
+			} else {
+				logger("https://github.com/ieedan/terminal");
 			}
 		}
 	}
