@@ -1,3 +1,3 @@
-# gui-t
+# terminal.aidanbleser.com
 
-A browser terminal recreation.
+A terminal recreation in the browser.
