@@ -1,15 +1,9 @@
 <script lang="ts">
 	import '../app.pcss';
-    import '@fontsource/geist-sans';
-    import '@fontsource/geist-mono';
-	import { ModeWatcher, mode, userPrefersMode } from 'mode-watcher';
-	import { onMount } from 'svelte';
-
-    onMount(() => {
-        console.log($mode);
-        console.log($userPrefersMode);
-    })
+	import '@fontsource/geist-sans';
+	import '@fontsource/geist-mono';
+	import { ModeWatcher } from 'mode-watcher';
 </script>
 
-<ModeWatcher/>
-<slot/>
+<ModeWatcher />
+<slot />
