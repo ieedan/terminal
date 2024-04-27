@@ -1,4 +1,4 @@
-import lineHeight from "line-height";
+import lineHeight from 'line-height';
 
 export type TextDimensions = {
 	width: number;
@@ -8,8 +8,8 @@ export type TextDimensions = {
 
 export const getTextDimensions = (element: HTMLElement): TextDimensions => {
 	const style = window.getComputedStyle(element);
-	const canvas = document.createElement("canvas");
-	const ctx = canvas.getContext("2d");
+	const canvas = document.createElement('canvas');
+	const ctx = canvas.getContext('2d');
 	if (!ctx) return { width: 0, height: 0, lineHeight: 0 };
 	ctx.font = style.font;
 
@@ -32,5 +32,5 @@ export const getTextDimensions = (element: HTMLElement): TextDimensions => {
 	// Clean up by removing the span from the body
 	document.body.removeChild(span);
 
-	return { width: ctx.measureText("g").width, height, lineHeight: lh  };
+	return { width: ctx.measureText('g').width, height, lineHeight: lh };
 };

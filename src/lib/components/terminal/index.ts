@@ -1,3 +1,3 @@
-import Root from "./Terminal.svelte";
+import Root from './Terminal.svelte';
 
 export default Root;

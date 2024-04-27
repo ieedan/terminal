@@ -1,5 +1,7 @@
 <script lang="ts">
+	import clap from '$lib/ts/clap';
 	import { getTextDimensions, type TextDimensions } from '$lib/ts/util';
+	import { onMount } from 'svelte';
 
 	let container: HTMLDivElement;
 	let pre: HTMLPreElement;
@@ -15,6 +17,10 @@
 	let focused = false;
 
 	let editorCursorPos: number = 0;
+
+	let commandHistory: string[] = [];
+	const HISTORY_KEY = 'cmd-history';
+	let currentHistoryIndex = -1;
 
 	const CURSOR_ANIMATION_DB_TIME = 250;
 	let cursorAnimationDebounce: number;
@@ -44,6 +50,26 @@
 	const editorKeydown = (e: KeyboardEvent) => {
 		if (e.key == 'Enter') e.preventDefault();
 
+		if (e.key == 'ArrowUp') {
+			e.preventDefault();
+			if (currentHistoryIndex > 0 && currentHistoryIndex < commandHistory.length) {
+				currentHistoryIndex--;
+				input = commandHistory[currentHistoryIndex];
+			} else {
+				currentHistoryIndex = commandHistory.length - 1;
+				input = commandHistory[currentHistoryIndex] ?? input;
+			}
+		} else if (e.key == 'ArrowDown') {
+			e.preventDefault();
+			if (currentHistoryIndex >= 0 && currentHistoryIndex < commandHistory.length - 1) {
+				currentHistoryIndex++;
+				input = commandHistory[currentHistoryIndex];
+			} else {
+				currentHistoryIndex = 0;
+				input = commandHistory[currentHistoryIndex] ?? input;
+			}
+		}
+
 		if (e.key == 'Enter') {
 			enter();
 		} else if (e.ctrlKey && e.key == 'c') {
@@ -71,10 +97,21 @@
 	};
 
 	const enter = () => {
-		if (input.trim() == 'clear') {
+		currentHistoryIndex = -1;
+		if (input.trim() == 'clear' || input.trim() == 'cls') {
 			previousText = '';
 		} else {
+			commandHistory.push(input.trim());
+			localStorage.setItem(HISTORY_KEY, JSON.stringify(commandHistory));
 			previousText += `${cwd} ${input.trim()} \n`;
+			const options = {
+				history: commandHistory,
+				clearHistory: () => {
+					commandHistory = [];
+					localStorage.setItem(HISTORY_KEY, JSON.stringify(commandHistory));
+				}
+			};
+			clap(input.trim(), options, (str) => (previousText += str + '\n'));
 		}
 
 		input = '';
@@ -82,7 +119,7 @@
 	};
 
 	const cancel = () => {
-		console.log('cancel');
+		// will implement when I create functions that actually do work
 	};
 
 	const focus = (e: Event) => {
@@ -91,6 +128,14 @@
 		characterRect = getTextDimensions(editor);
 		focused = true;
 	};
+
+	onMount(() => {
+		const history = localStorage.getItem(HISTORY_KEY);
+
+		if (history) {
+			commandHistory = JSON.parse(history);
+		}
+	});
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->

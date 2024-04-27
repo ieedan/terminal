@@ -16,17 +16,17 @@
 	role="checkbox"
 	on:click={toggle}
 	type="button"
-	class="border-border bg-gui-background group relative h-6 w-10 rounded-2xl border shadow-sm"
+	class="border-border group relative h-6 w-10 rounded-2xl border bg-gui-background shadow-sm"
 	aria-checked={$mode == 'dark'}
 >
 	<div
 		class="absolute left-[1px] top-[1px] flex size-5 place-items-center justify-center
-        rounded-full transition-all group-aria-checked:translate-x-4 bg-gui-foreground-primary text-gui-background"
+        rounded-full bg-gui-foreground-primary text-gui-background transition-all group-aria-checked:translate-x-4"
 	>
 		{#if $mode == 'light'}
-			<FontAwesomeIcon icon={faSunBright} size="xs"/>
+			<FontAwesomeIcon icon={faSunBright} size="xs" />
 		{:else}
-			<FontAwesomeIcon icon={faMoon} size="xs"/>
+			<FontAwesomeIcon icon={faMoon} size="xs" />
 		{/if}
 	</div>
 </button>
