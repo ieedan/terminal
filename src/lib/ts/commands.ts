@@ -1,7 +1,6 @@
 import { mode, setMode } from 'mode-watcher';
 import type { clapOptions, stdout } from './clap';
 import { get } from 'svelte/store';
-import { goto } from '$app/navigation';
 
 export type Commands = {
 	[key: string]: {
@@ -26,6 +25,8 @@ export const commands: Commands = {
 			logger('        --clr: clears command history');
 			logger('    src: get the link to the source repository');
 			logger('    	--go: go to the source repository');
+			logger('    ask [question]: Ask the terminal a yes or no question');
+			logger("    	--please: Doesn't do anything but is polite and looked kindly upon by the machines");
 			logger('');
 			logger('More commands coming soon!');
 		}
@@ -93,6 +94,15 @@ export const commands: Commands = {
 				window.open("https://github.com/ieedan/terminal", "_blank");
 			} else {
 				logger("https://github.com/ieedan/terminal");
+			}
+		}
+	},
+	ask: {
+		fn: async ({ args, logger }) => {
+			if (args.includes('--please')) {
+				logger("Thanks for asking nicely! No");
+			} else {
+				logger("No");
 			}
 		}
 	}

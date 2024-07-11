@@ -23,7 +23,7 @@
 	let currentHistoryIndex = -1;
 
 	const CURSOR_ANIMATION_DB_TIME = 250;
-	let cursorAnimationDebounce: number;
+	let cursorAnimationDebounce: NodeJS.Timeout;
 	let cursorCanAnimate = true;
 
 	$: cursorPos = calculateCursorPosition(
